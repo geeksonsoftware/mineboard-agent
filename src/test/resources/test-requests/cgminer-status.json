@@ -1,0 +1,43 @@
+{
+   "STATUS":[
+      {
+         "STATUS":"S",
+         "When":1400782714,
+         "Code":11,
+         "Msg":"Summary",
+         "Description":"bfgminer 3.10.0"
+      }
+   ],
+   "SUMMARY":[
+      {
+         "Elapsed":288,
+         "Algorithm":"fastauto",
+         "MHS av":0.000,
+         "MHS 5s":0.000,
+         "Found Blocks":0,
+         "Getworks":39,
+         "Accepted":0,
+         "Rejected":0,
+         "Hardware Errors":0,
+         "Utility":0.000,
+         "Discarded":74,
+         "Stale":0,
+         "Get Failures":0,
+         "Local Work":115,
+         "Remote Failures":0,
+         "Network Blocks":25,
+         "Total MH":0.0000,
+         "Diff1 Work":0,
+         "Work Utility":0.000,
+         "Difficulty Accepted":0.00000000,
+         "Difficulty Rejected":0.00000000,
+         "Difficulty Stale":0.00000000,
+         "Best Share":0,
+         "Device Hardware%":0.0000,
+         "Device Rejected%":0.0000,
+         "Pool Rejected%":0.0000,
+         "Pool Stale%":0.0000
+      }
+   ],
+   "id":1
+}

@@ -9,6 +9,9 @@ import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.geeksonsoftware.mineboard.agent.api.model.CgminerCmdDevs;
+import com.geeksonsoftware.mineboard.agent.api.model.CgminerCmdStatus;
 import com.geeksonsoftware.mineboard.agent.service.JsonService;
 
 /**
@@ -24,6 +27,7 @@ public class CgminerAPI {
 	private Socket socket = null;
 	private static Logger log = Logger.getLogger(JsonService.class);
 
+	private ObjectMapper mapper = new ObjectMapper();
 	private InetAddress ip;
 	private int port;
 
@@ -31,44 +35,6 @@ public class CgminerAPI {
 		if (socket != null) {
 			socket.close();
 			socket = null;
-		}
-	}
-
-	private void display(String result) throws Exception {
-		String value;
-		String name;
-		String[] sections = result.split("\\|", 0);
-
-		for (int i = 0; i < sections.length; i++) {
-			if (sections[i].trim().length() > 0) {
-				String[] data = sections[i].split(",", 0);
-
-				for (int j = 0; j < data.length; j++) {
-					String[] nameval = data[j].split("=", 2);
-
-					if (j == 0) {
-						if (nameval.length > 1
-								&& Character.isDigit(nameval[1].charAt(0)))
-							name = nameval[0] + nameval[1];
-						else
-							name = nameval[0];
-
-						log.debug("[" + name + "] =>");
-						log.debug("(");
-					}
-
-					if (nameval.length > 1) {
-						name = nameval[0];
-						value = nameval[1];
-					} else {
-						name = "" + j;
-						value = nameval[0];
-					}
-
-					log.debug("   [" + name + "] => " + value);
-				}
-				log.debug(")");
-			}
 		}
 	}
 
@@ -82,9 +48,9 @@ public class CgminerAPI {
 				+ ":" + port);
 
 		try {
-			socket = new Socket(ip, port);
+			socket = createSocket(ip, port);
 			PrintStream ps = new PrintStream(socket.getOutputStream());
-			ps.print(cmd.toLowerCase().toCharArray());
+			ps.print("{\"command\":\"" + cmd + "\"}");
 			ps.flush();
 
 			InputStreamReader isr = new InputStreamReader(
@@ -121,13 +87,29 @@ public class CgminerAPI {
 		this.port = port;
 	}
 
-	public String getSummary() {
+	public CgminerCmdStatus getStatus() {
 		try {
-			return process("summary", ip, port);
+			String result = process("summary", ip, port);
+			return mapper.readValue(result, CgminerCmdStatus.class);
 		} catch (Exception e) {
 			log.error("Unable to retrieve data from miner", e);
 			return null;
 		}
+	}
+
+	public CgminerCmdDevs getDevices() {
+		try {
+			String result = process("devs", ip, port);
+			return mapper.readValue(result, CgminerCmdDevs.class);
+		} catch (Exception e) {
+			log.error("Unable to retrieve devices from miner", e);
+			return null;
+		}
+	}
+
+	// Used for unit testing
+	protected Socket createSocket(InetAddress ip, int port) throws IOException {
+		return new Socket(ip, port);
 	}
 
 }
