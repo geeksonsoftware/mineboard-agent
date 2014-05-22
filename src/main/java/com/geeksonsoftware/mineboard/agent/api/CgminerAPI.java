@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.geeksonsoftware.mineboard.agent.api.model.CgminerCmdDevs;
 import com.geeksonsoftware.mineboard.agent.api.model.CgminerCmdStatus;
-import com.geeksonsoftware.mineboard.agent.service.JsonService;
 
 /**
  * 
@@ -25,7 +24,7 @@ public class CgminerAPI {
 
 	private final int MAXRECEIVESIZE = 65535;
 	private Socket socket = null;
-	private static Logger log = Logger.getLogger(JsonService.class);
+	private static Logger log = Logger.getLogger(CgminerAPI.class);
 
 	private ObjectMapper mapper = new ObjectMapper();
 	private InetAddress ip;
