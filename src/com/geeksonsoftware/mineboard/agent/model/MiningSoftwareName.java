@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum MiningSoftwareName {
-	CGMINER("cgminer"), BitMinter("BitMinter"), BTCMINER("BTCMiner"), BFG("BFG");
+	CGMINER("cgminer"), BitMinter("BitMinter"), BTCMINER("BTCMiner"), BFG("BFGMiner");
 
 	private String label;
 

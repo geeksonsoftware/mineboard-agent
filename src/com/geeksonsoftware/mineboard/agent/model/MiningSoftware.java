@@ -38,4 +38,20 @@ public class MiningSoftware {
 	public void setPort(int port) {
 		this.port = port;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Name: ");
+		builder.append(name.getLabel());
+		builder.append(System.getProperty("line.separator"));
+		builder.append("IP: ");
+		builder.append(ip);
+		builder.append(System.getProperty("line.separator"));
+		builder.append("Port: ");
+		builder.append(port);
+		builder.append(System.getProperty("line.separator"));
+		return builder.toString();
+	}
+
 }

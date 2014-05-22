@@ -5,6 +5,7 @@ import java.util.TimerTask;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
+import org.apache.log4j.Logger;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -19,13 +20,16 @@ import com.geeksonsoftware.mineboard.agent.model.PostUpdate;
  *
  */
 public class TimerTaskUpdate extends TimerTask {
-
+	private static Logger log = Logger.getLogger(TimerTaskUpdate.class);
 	private Configuration configuration;
-	private String url = "http://localhost:3000/api/update/";
+	private String url;
 
 	public TimerTaskUpdate(Configuration configuration) {
 		this.configuration = configuration;
-		url += configuration.getDashboardId();
+		url = StaticDataService.WEBSITE_URL
+				+ (StaticDataService.WEBSITE_URL.endsWith("/") ? configuration
+						.getDashboardId() : "/"
+						+ configuration.getDashboardId());
 	}
 
 	@Override
@@ -40,16 +44,12 @@ public class TimerTaskUpdate extends TimerTask {
 				Entity.entity(data, "application/json"));
 
 		if (response.getStatus() != 200) {
-
-			throw new RuntimeException("Failed : HTTP error code : "
-					+ response.getStatus());
-
+			log.error("Webserver replied code " + response.getStatus()
+					+ " instead of OK 200");
 		}
 
-		System.out.println("Server response : \n");
-
-		System.out.println(response.readEntity(String.class));
-
+		log.debug("Server response:");
+		log.debug(response.readEntity(String.class));
 		response.close();
 
 	}

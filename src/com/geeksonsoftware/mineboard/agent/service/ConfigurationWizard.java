@@ -20,14 +20,20 @@ public class ConfigurationWizard {
 		Scanner in = new Scanner(System.in);
 		out.println("Seems you didn't configured the agent yet, let's do it!");
 
+		Configuration configuration = new Configuration();
+
 		String input = "";
 		do {
 			out.print("Enter the Dashboard ID: ");
 			input = in.nextLine();
 		} while (!validateDashboardId(input));
 
-		Configuration configuration = new Configuration();
 		configuration.setDashboardId(input);
+
+		do {
+			out.print("Enter the interval between request in seconds: ");
+			input = in.nextLine();
+		} while (!validateSeconds(input));
 
 		out.println("Perfect, now let's add some mining machine");
 
@@ -51,8 +57,17 @@ public class ConfigurationWizard {
 		} while (true);
 
 		in.close();
-		
+
 		return configuration;
+	}
+
+	private static boolean validateSeconds(String input) {
+		try {
+			int value = Integer.parseInt(input);
+			return value > 0;
+		} catch (NumberFormatException ex) {
+			return false;
+		}
 	}
 
 	private static MiningSoftware askMiningSoftware() {
@@ -91,7 +106,8 @@ public class ConfigurationWizard {
 
 		miningSoftware.setName(MiningSoftwareName.getByLabel(input));
 
-		printSummary(miningSoftware);
+		out.println("Summary:");
+		out.print(miningSoftware.toString());
 
 		do {
 			out.print("Please confirm with 'y' or deny with 'n': ");
@@ -99,7 +115,7 @@ public class ConfigurationWizard {
 		} while (!validateYesNo(input));
 
 		in.close();
-		
+
 		if (input.equalsIgnoreCase("y")) {
 			return miningSoftware;
 		} else {
@@ -111,14 +127,6 @@ public class ConfigurationWizard {
 
 	private static boolean validateYesNo(String input) {
 		return input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n");
-	}
-
-	private static void printSummary(MiningSoftware miningSoftware) {
-		out.println("Summary:");
-		out.println("IP:" + miningSoftware.getIp());
-		out.println("Port: " + miningSoftware.getPort());
-		out.println("Application: " + miningSoftware.getName().getLabel());
-
 	}
 
 	private static boolean validateMiningApp(String input) {
