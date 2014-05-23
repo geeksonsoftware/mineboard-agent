@@ -2,12 +2,12 @@ package com.geeksonsoftware.mineboard.agent.model;
 
 public class PostUpdate {
 	private boolean error;
-	private String message;
+	private PostUpdateSummary summary;
 
-	public PostUpdate(boolean error, String message) {
+	public PostUpdate(boolean error, PostUpdateSummary summary) {
 		super();
 		this.error = error;
-		this.message = message;
+		this.summary = summary;
 	}
 
 	public boolean isError() {
@@ -18,11 +18,11 @@ public class PostUpdate {
 		this.error = error;
 	}
 
-	public String getMessage() {
-		return message;
+	public PostUpdateSummary getSummary() {
+		return summary;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setSummary(PostUpdateSummary summary) {
+		this.summary = summary;
 	}
 }

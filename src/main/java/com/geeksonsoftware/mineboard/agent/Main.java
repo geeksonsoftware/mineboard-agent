@@ -75,7 +75,7 @@ public final class Main {
 
 		Timer timer = new Timer(true);
 		timer.scheduleAtFixedRate(new TimerTaskUpdate(configuration), 0,
-				5 * 1000);
+				configuration.getIntervalSeconds() * 1000);
 
 		System.out.println("TimerTask started");
 
@@ -91,15 +91,5 @@ public final class Main {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
-		/*configuration.setDashboardId("testId123456");
-
-		configuration.addMiner(new MiningSoftware(MiningSoftwareName.CGMINER,
-				"127.0.0.1", 4032));
-		configuration.addMiner(new MiningSoftware(MiningSoftwareName.BFG,
-				"127.0.0.2", 4041));
-		configuration.addMiner(new MiningSoftware(MiningSoftwareName.BTCMINER,
-				"127.0.0.3", 4054));*/
-
 	}
 }
