@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 
 import com.geeksonsoftware.mineboard.agent.api.CgminerAPI;
@@ -69,7 +68,7 @@ public class CgminerApiTest {
 
 		cgminerApi = new CgminerAPI("127.0.0.1", 4028) {
 			@Override
-			protected Socket createSocket(InetAddress ip, int port) {
+			protected Socket createSocket() {
 				return socket;
 			}
 		};

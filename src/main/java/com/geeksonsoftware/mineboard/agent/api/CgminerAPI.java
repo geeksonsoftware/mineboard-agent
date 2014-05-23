@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -15,7 +16,10 @@ import com.geeksonsoftware.mineboard.agent.api.model.CgminerCmdStatus;
 
 /**
  * 
- * Cgminer API service based on https://github.com/ckolivas/cgminer/blob/dbac7f53a6edf546fa263a82d58e4d9ac432889c/API.java
+ * Cgminer API service based on 
+ * https://github.com/ckolivas/cgminer/blob/dbac7f53a6edf546fa263a82d58e4d9ac432889c/API.java
+ * 
+ * Compatible with BFGMiner
  * 
  * @author wizche
  *
@@ -47,7 +51,10 @@ public class CgminerAPI {
 				+ ":" + port);
 
 		try {
-			socket = createSocket(ip, port);
+			socket = createSocket();
+			socket.setSoTimeout(2000);
+			socket.connect(new InetSocketAddress(ip, port), 2000);
+			
 			PrintStream ps = new PrintStream(socket.getOutputStream());
 			ps.print("{\"command\":\"" + cmd + "\"}");
 			ps.flush();
@@ -89,7 +96,12 @@ public class CgminerAPI {
 	public CgminerCmdStatus getStatus() {
 		try {
 			String result = process("summary", ip, port);
-			return mapper.readValue(result, CgminerCmdStatus.class);
+			if (result != null) {
+				return mapper.readValue(result, CgminerCmdStatus.class);
+			} else {
+				throw new Exception(
+						"Response from mining software not available!");
+			}
 		} catch (Exception e) {
 			log.error("Unable to retrieve data from miner", e);
 			return null;
@@ -99,7 +111,12 @@ public class CgminerAPI {
 	public CgminerCmdDevs getDevices() {
 		try {
 			String result = process("devs", ip, port);
-			return mapper.readValue(result, CgminerCmdDevs.class);
+			if (result != null) {
+				return mapper.readValue(result, CgminerCmdDevs.class);
+			} else {
+				throw new Exception(
+						"Response from mining software not available!");
+			}
 		} catch (Exception e) {
 			log.error("Unable to retrieve devices from miner", e);
 			return null;
@@ -107,8 +124,8 @@ public class CgminerAPI {
 	}
 
 	// Used for unit testing
-	protected Socket createSocket(InetAddress ip, int port) throws IOException {
-		return new Socket(ip, port);
+	protected Socket createSocket() throws IOException {
+		return new Socket();
 	}
 
 }

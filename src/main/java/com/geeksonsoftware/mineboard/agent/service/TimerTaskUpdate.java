@@ -18,6 +18,7 @@ import com.geeksonsoftware.mineboard.agent.api.model.CgminerSummary;
 import com.geeksonsoftware.mineboard.agent.model.Configuration;
 import com.geeksonsoftware.mineboard.agent.model.MiningSoftware;
 import com.geeksonsoftware.mineboard.agent.model.PostUpdate;
+import com.geeksonsoftware.mineboard.agent.model.PostUpdateResponse;
 import com.geeksonsoftware.mineboard.agent.model.PostUpdateSummary;
 
 /**
@@ -49,8 +50,16 @@ public class TimerTaskUpdate extends TimerTask {
 						miner.getPort());
 				CgminerCmdStatus cmdStatus = cgApi.getStatus();
 				CgminerCmdDevs cmdDevs = cgApi.getDevices();
-				CgminerStatus status = cmdStatus.getSTATUS().get(0);
-				CgminerSummary summary = cmdStatus.getSUMMARY().get(0);
+
+				CgminerStatus status = null;
+				if (cmdStatus != null && cmdStatus.getSTATUS() != null) {
+					status = cmdStatus.getSTATUS().get(0);
+				}
+
+				CgminerSummary summary = null;
+				if (cmdStatus != null && cmdStatus.getSUMMARY() != null) {
+					summary = cmdStatus.getSUMMARY().get(0);
+				}
 
 				if (status != null && summary != null && cmdDevs != null) {
 					PostUpdateSummary pus = new PostUpdateSummary(status
@@ -66,8 +75,9 @@ public class TimerTaskUpdate extends TimerTask {
 				}
 				break;
 			default:
-				log.error(String.format("Miner %s is not known or supported yet!", miner
-						.getName().getLabel()));
+				log.error(String.format(
+						"Miner %s is not known or supported yet!", miner
+								.getName().getLabel()));
 				break;
 			}
 		}
@@ -89,8 +99,15 @@ public class TimerTaskUpdate extends TimerTask {
 						+ " instead of OK 200");
 			}
 
-			log.debug("Server response:");
-			log.debug(response.readEntity(String.class));
+			PostUpdateResponse res = response
+					.readEntity(PostUpdateResponse.class);
+
+			if (res != null && res.isOk()) {
+				log.debug("Update submitted!");
+			} else {
+				log.error("Failed to submit the update!");
+				log.debug(response.readEntity(String.class));
+			}
 			response.close();
 		} catch (Exception e) {
 			log.error("Webserver connection cannot be established!", e);
