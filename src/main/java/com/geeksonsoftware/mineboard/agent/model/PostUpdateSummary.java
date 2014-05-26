@@ -13,7 +13,7 @@ public class PostUpdateSummary {
 	@JsonProperty("deviceCount")
 	private int deviceCount;
 
-	@JsonProperty("Hardware Errors")
+	@JsonProperty("hwErrors")
 	private Integer hardware_Errors;
 
 	public PostUpdateSummary(boolean alive, Double totalAvgMh, int deviceCount,

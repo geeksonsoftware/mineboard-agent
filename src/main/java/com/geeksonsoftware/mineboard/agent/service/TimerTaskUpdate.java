@@ -1,5 +1,7 @@
 package com.geeksonsoftware.mineboard.agent.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TimerTask;
 
 import javax.ws.rs.client.Entity;
@@ -13,9 +15,11 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import com.geeksonsoftware.mineboard.agent.api.CgminerAPI;
 import com.geeksonsoftware.mineboard.agent.api.model.CgminerCmdDevs;
 import com.geeksonsoftware.mineboard.agent.api.model.CgminerCmdStatus;
+import com.geeksonsoftware.mineboard.agent.api.model.CgminerDevice;
 import com.geeksonsoftware.mineboard.agent.api.model.CgminerStatus;
 import com.geeksonsoftware.mineboard.agent.api.model.CgminerSummary;
 import com.geeksonsoftware.mineboard.agent.model.Configuration;
+import com.geeksonsoftware.mineboard.agent.model.DeviceUpdate;
 import com.geeksonsoftware.mineboard.agent.model.MiningSoftware;
 import com.geeksonsoftware.mineboard.agent.model.PostUpdate;
 import com.geeksonsoftware.mineboard.agent.model.PostUpdateResponse;
@@ -43,7 +47,7 @@ public class TimerTaskUpdate extends TimerTask {
 	@Override
 	public void run() {
 		for (MiningSoftware miner : configuration.getMiners()) {
-			switch (miner.getName()) {
+			switch (miner.getType()) {
 			case CGMINER:
 			case BFGMiner:
 				CgminerAPI cgApi = new CgminerAPI(miner.getIp(),
@@ -66,18 +70,25 @@ public class TimerTaskUpdate extends TimerTask {
 							.getSTATUS().equals("S"), summary.getTotal_MH(),
 							cmdDevs.getDEVS().size(),
 							summary.getHardware_Errors());
-					PostUpdate pu = new PostUpdate(false, pus);
+
+					List<DeviceUpdate> devices = new ArrayList<DeviceUpdate>();
+					for (CgminerDevice dev : cmdDevs.getDEVS()) {
+						devices.add(new DeviceUpdate(dev.getName()
+								+ dev.getID(), dev.getMHS_av()));
+					}
+					PostUpdate pu = new PostUpdate(false, miner.getName(), pus);
+					pu.setDevices(devices);
 					sendUpdate(pu);
 				} else {
 					log.error(String.format(
 							"Unable to retrieve mining information for %s",
-							miner.getName().getLabel()));
+							miner.getType().getLabel()));
 				}
 				break;
 			default:
 				log.error(String.format(
 						"Miner %s is not known or supported yet!", miner
-								.getName().getLabel()));
+								.getType().getLabel()));
 				break;
 			}
 		}

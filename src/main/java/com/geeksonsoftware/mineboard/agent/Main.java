@@ -77,19 +77,15 @@ public final class Main {
 		timer.scheduleAtFixedRate(new TimerTaskUpdate(configuration), 0,
 				configuration.getIntervalSeconds() * 1000);
 
-		System.out.println("TimerTask started");
+		log.info("Timer started!");
 
-		try {
-			Thread.sleep(30000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		while (true) {
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
-		timer.cancel();
-		System.out.println("TimerTask cancelled");
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+
 	}
 }

@@ -80,6 +80,13 @@ public class ConfigurationWizard {
 
 		String input = "";
 		do {
+			out.print("Enter an ID that identify your miner (i.e. Miner1): ");
+			input = in.nextLine();
+		} while (!input.isEmpty());
+
+		miningSoftware.setName(input);
+
+		do {
 			out.print("Enter the IP: ");
 			input = in.nextLine();
 		} while (!validateIp(input));
@@ -104,7 +111,7 @@ public class ConfigurationWizard {
 			input = in.nextLine();
 		} while (!validateMiningApp(input));
 
-		miningSoftware.setName(MiningSoftwareName.getByLabel(input));
+		miningSoftware.setType(MiningSoftwareName.getByLabel(input));
 
 		out.println("Summary:");
 		out.print(miningSoftware.toString());

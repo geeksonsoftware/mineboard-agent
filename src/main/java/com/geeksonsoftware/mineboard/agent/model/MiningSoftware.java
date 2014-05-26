@@ -2,12 +2,14 @@ package com.geeksonsoftware.mineboard.agent.model;
 
 public class MiningSoftware {
 
-	private MiningSoftwareName name;
+	private String name;
+	private MiningSoftwareName type;
 	private String ip;
 	private int port;
 
-	public MiningSoftware(MiningSoftwareName name, String ip, int port) {
+	public MiningSoftware(String name, MiningSoftwareName type, String ip, int port) {
 		this.name = name;
+		this.type = type;
 		this.ip = ip;
 		this.port = port;
 	}
@@ -15,12 +17,12 @@ public class MiningSoftware {
 	public MiningSoftware() {
 	}
 
-	public MiningSoftwareName getName() {
-		return name;
+	public MiningSoftwareName getType() {
+		return type;
 	}
 
-	public void setName(MiningSoftwareName name) {
-		this.name = name;
+	public void setType(MiningSoftwareName type) {
+		this.type = type;
 	}
 
 	public String getIp() {
@@ -39,11 +41,22 @@ public class MiningSoftware {
 		this.port = port;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Name: ");
-		builder.append(name.getLabel());
+		builder.append(name);
+		builder.append(System.getProperty("line.separator"));
+		builder.append("Type: ");
+		builder.append(type.getLabel());
 		builder.append(System.getProperty("line.separator"));
 		builder.append("IP: ");
 		builder.append(ip);
