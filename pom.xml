@@ -6,6 +6,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Mineboard Agent</name>
 	<description>Submit mining application update to mineboard.io</description>
+	<properties>
+		<log4j.properties.directory>src/main/resources</log4j.properties.directory>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
@@ -62,6 +65,9 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
+				<includes>
+					<include>log4j${ENV}.properties</include>
+				</includes>
 			</resource>
 		</resources>
 		<testResources>

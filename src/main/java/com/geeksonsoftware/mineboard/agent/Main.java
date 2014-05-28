@@ -13,7 +13,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.geeksonsoftware.mineboard.agent.model.Configuration;
-import com.geeksonsoftware.mineboard.agent.service.ConfigurationWizard;
 import com.geeksonsoftware.mineboard.agent.service.JsonService;
 import com.geeksonsoftware.mineboard.agent.service.TimerTaskUpdate;
 
@@ -56,7 +55,7 @@ public final class Main {
 			if (cmd.hasOption("s")) {
 				if (configuration == null) {
 					System.out
-							.println("Configuration is empty! Please start the program and complete the configuration wizard!");
+							.println("Configuration is empty! Please configure the agent through the config.json file!");
 				} else {
 					System.out.println(configuration.toString());
 				}
@@ -66,11 +65,17 @@ public final class Main {
 			log.error("Failed to parse console parameters", e1);
 		}
 
-		log.info("Starting!");
+		log.debug("Starting!");
 
 		if (configuration == null) {
-			configuration = ConfigurationWizard.start();
-			jsonService.saveConfiguration(configuration);
+			log.error("Configuration not found or empty!");
+			return;
+		}
+
+		if (configuration.getMiners() == null
+				|| configuration.getMiners().size() < 1) {
+			log.error("You didn't configured any miners in config.json yet!");
+			return;
 		}
 
 		Timer timer = new Timer(true);
