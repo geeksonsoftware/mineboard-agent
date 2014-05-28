@@ -42,7 +42,6 @@ The config is structure the following way:
 
 You can assign as many miners as you want!
 
-----------
 
 Install
 =======
@@ -75,7 +74,6 @@ Windows
 -------
 
  - Coming soon
-----------
 
 
   [1]: https://mineboard.io
