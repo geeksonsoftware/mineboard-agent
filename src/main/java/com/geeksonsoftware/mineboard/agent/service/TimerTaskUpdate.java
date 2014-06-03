@@ -38,8 +38,8 @@ public class TimerTaskUpdate extends TimerTask {
 
 	public TimerTaskUpdate(Configuration configuration) {
 		this.configuration = configuration;
-		url = StaticDataService.WEBSITE_URL
-				+ (StaticDataService.WEBSITE_URL.endsWith("/") ? configuration
+		url = StaticDataService.getWebsiteUrl()
+				+ (StaticDataService.getWebsiteUrl().endsWith("/") ? configuration
 						.getDashboardId() : "/"
 						+ configuration.getDashboardId());
 	}
@@ -76,7 +76,8 @@ public class TimerTaskUpdate extends TimerTask {
 						devices.add(new DeviceUpdate(dev.getName()
 								+ dev.getID(), dev.getMHS_av()));
 					}
-					PostUpdate pu = new PostUpdate(false, miner.getName(), pus);
+					PostUpdate pu = new PostUpdate(false, miner.getSecret(),
+							pus);
 					pu.setDevices(devices);
 					sendUpdate(pu);
 				} else {

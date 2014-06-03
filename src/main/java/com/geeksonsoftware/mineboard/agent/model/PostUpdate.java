@@ -3,29 +3,35 @@ package com.geeksonsoftware.mineboard.agent.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.ext.Provider;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@Provider
+@Produces(MediaType.APPLICATION_JSON)
 public class PostUpdate {
 	private boolean error;
 	private PostUpdateSummary summary;
-	private String name;
+	private String secret;
 
 	@JsonProperty("devices")
 	private List<DeviceUpdate> devices = new ArrayList<DeviceUpdate>();
 
-	public PostUpdate(boolean error, String name, PostUpdateSummary summary) {
+	public PostUpdate(boolean error, String secret, PostUpdateSummary summary) {
 		super();
 		this.error = error;
-		this.name = name;
+		this.secret = secret;
 		this.summary = summary;
 	}
 
-	public String getName() {
-		return name;
+	public String getSecret() {
+		return secret;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setSecret(String secret) {
+		this.secret = secret;
 	}
 
 	@JsonProperty("devices")
