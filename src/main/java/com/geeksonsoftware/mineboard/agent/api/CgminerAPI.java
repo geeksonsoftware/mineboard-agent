@@ -9,8 +9,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.geeksonsoftware.mineboard.agent.api.model.CgminerCmdDevs;
 import com.geeksonsoftware.mineboard.agent.api.model.CgminerCmdStatus;
 

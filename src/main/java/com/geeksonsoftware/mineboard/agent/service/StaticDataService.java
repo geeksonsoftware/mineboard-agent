@@ -12,10 +12,13 @@ public class StaticDataService {
 
 		try {
 			input = StaticDataService.class
-					.getResourceAsStream("/config.properties");
-			prop.load(input);
-			String url = prop.getProperty("url");
-			return url != null ? url : "http://localhost:3000/api/dashboard/";
+					.getResourceAsStream("/config.dev.properties");
+			if (input != null) {
+				prop.load(input);
+				String url = prop.getProperty("url");
+				return url != null ? url
+						: "http://localhost:3000/api/dashboard/";
+			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {

@@ -3,7 +3,8 @@ package com.geeksonsoftware.mineboard.agent.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.geeksonsoftware.mineboard.agent.service.StaticDataService;
 
 public class Configuration {

@@ -1,5 +1,6 @@
 package com.geeksonsoftware.mineboard.agent;
 
+import java.io.OutputStreamWriter;
 import java.util.Timer;
 
 import org.apache.commons.cli.CommandLine;
@@ -8,9 +9,11 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 
 import com.geeksonsoftware.mineboard.agent.model.Configuration;
 import com.geeksonsoftware.mineboard.agent.service.JsonService;
@@ -44,7 +47,12 @@ public final class Main {
 			if (cmd.hasOption("l")) {
 				String level = cmd.getOptionValue("level");
 				Level newLevel = Level.toLevel(level);
+				LogManager.getRootLogger().removeAllAppenders();
 				LogManager.getRootLogger().setLevel(newLevel);
+				ConsoleAppender ca = new ConsoleAppender();
+				ca.setWriter(new OutputStreamWriter(System.out));
+				ca.setLayout(new PatternLayout("%-5p [%t]: %m%n"));
+				LogManager.getRootLogger().addAppender(ca);
 				log.info("Changed debug level to " + newLevel.toString());
 			}
 			if (cmd.hasOption("h")) {

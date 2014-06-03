@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+import org.glassfish.jersey.jackson.JacksonFeature;
 
 import com.geeksonsoftware.mineboard.agent.api.CgminerAPI;
 import com.geeksonsoftware.mineboard.agent.api.model.CgminerCmdDevs;
@@ -32,11 +33,17 @@ import com.geeksonsoftware.mineboard.agent.model.PostUpdateSummary;
  *
  */
 public class TimerTaskUpdate extends TimerTask {
+
 	private static Logger log = Logger.getLogger(TimerTaskUpdate.class);
 	private Configuration configuration;
 	private String url;
+	private Client client;
 
 	public TimerTaskUpdate(Configuration configuration) {
+		client = ClientBuilder.newClient();
+		// enable POJO mapping via Jackson
+		client.register(JacksonFeature.class);
+
 		this.configuration = configuration;
 		url = StaticDataService.getWebsiteUrl()
 				+ (StaticDataService.getWebsiteUrl().endsWith("/") ? configuration
@@ -97,14 +104,11 @@ public class TimerTaskUpdate extends TimerTask {
 	}
 
 	private void sendUpdate(PostUpdate postUpdate) {
-
-		ResteasyClient client = new ResteasyClientBuilder().build();
-
-		ResteasyWebTarget target = client.target(url);
-
 		try {
-			Response response = target.request().post(
-					Entity.entity(postUpdate, "application/json"));
+			Response response = client
+					.target(url)
+					.request(MediaType.APPLICATION_JSON)
+					.post(Entity.entity(postUpdate, MediaType.APPLICATION_JSON));
 
 			if (response.getStatus() != 200) {
 				log.error("Webserver replied code " + response.getStatus()
@@ -118,11 +122,10 @@ public class TimerTaskUpdate extends TimerTask {
 				log.debug("Update submitted!");
 			} else {
 				log.error("Failed to submit the update!");
-				log.debug(response.readEntity(String.class));
+				log.debug(res.getError());
 			}
-			response.close();
 		} catch (Exception e) {
-			log.error("Webserver connection cannot be established!", e);
+			log.error("Post update failed!", e);
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package com.geeksonsoftware.mineboard.agent.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 public class PostUpdateSummary {
 
