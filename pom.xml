@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mineboard-agent</groupId>
 	<artifactId>mineboard-agent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<name>Mineboard Agent</name>
 	<description>Submit mining application update to mineboard.io</description>
 	<properties>
