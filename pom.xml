@@ -79,13 +79,7 @@
 						</goals>
 						<configuration>
 							<tasks>
-								<delete file="${project.build.outputDirectory}/config.dev.properties" />
-								<delete
-									file="${project.build.outputDirectory}/config.prod.properties" />
-								<delete file="${project.build.outputDirectory}/log4j.prod.properties" />
-								<copy file="src/main/resources/config.prod.properties"
-									tofile="${project.build.outputDirectory}/config.properties" />
-								<copy file="src/main/resources/log4j.prod.properties"
+								<copy file="src/main/resources/log4j.properties"
 									tofile="${project.build.outputDirectory}/log4j.properties" />
 							</tasks>
 						</configuration>
